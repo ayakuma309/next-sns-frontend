@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Post from './Post'
 import apiClient from '@/lib/apiClient';
 import { useRouter } from 'next/router';
@@ -10,6 +10,7 @@ const Timeline = () => {
   const [latestPosts, setLatestPosts] = useState<PostType[]>([]);
   const router = useRouter();
 
+  //投稿
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -25,6 +26,19 @@ const Timeline = () => {
       alert("入力内容が正しくありません。");
     }
   };
+
+  //最近の投稿を取得
+  useEffect(() => {
+    const fetchLatestPosts = async () => {
+      try{
+        const res = await apiClient.get("/posts/get_latest_posts");
+        setLatestPosts(res.data);
+      }catch(err){
+        console.log(err);
+      }
+    };
+    fetchLatestPosts();
+  }, []);
 
   return (
     <div>
