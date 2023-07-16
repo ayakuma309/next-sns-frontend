@@ -1,3 +1,4 @@
+import { useAuth } from '@/context/auth'
 import apiClient from '@/lib/apiClient'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -8,7 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>("")
 
   const router = useRouter();
-
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,9 +22,11 @@ const Login = () => {
       });
 
       const token = response.data.token;
+      login(token);
+
       router.push("/");
     } catch (err) {
-      alert("入力内容が正しくありません。");
+      console.log("入力内容が正しくありません。");
     }
   };
 
