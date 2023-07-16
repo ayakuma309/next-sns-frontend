@@ -1,20 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Post from './Post'
 import apiClient from '@/lib/apiClient';
 import { useRouter } from 'next/router';
+import { PostType } from '@/types/types';
 
 const Timeline = () => {
-  const [postText, setPostText] = React.useState("");
+  const [postText, setPostText] = useState("");
+  //最近の投稿を取得
+  const [latestPosts, setLatestPosts] = useState<PostType[]>([]);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try{
-      await apiClient.post("/posts/post", {
+      const newPost = await apiClient.post("/posts/post", {
         content: postText,
       });
-
+      //最近の投稿を更新
+      setLatestPosts((prevPosts) => [newPost.data, ...prevPosts]);
       setPostText("");
       router.push("/");
     }catch(err){
@@ -42,7 +46,9 @@ const Timeline = () => {
               </button>
             </form>
           </div>
-          <Post />
+          {latestPosts && latestPosts.map((post: PostType) => (
+            <Post key={post.id} post={post} />
+          ))}
         </main>
       </div>
     </div>
