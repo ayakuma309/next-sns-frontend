@@ -1,7 +1,7 @@
 import apiClient from '@/lib/apiClient'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { FormEvent, useState } from 'react'
+import React, { useState } from 'react'
 
 const SignUp = () => {
   const [username, setUserName] = useState<string>("")
@@ -9,7 +9,7 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>("")
 
   const router = useRouter();
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     //新規登録を行うAPIをたたく
